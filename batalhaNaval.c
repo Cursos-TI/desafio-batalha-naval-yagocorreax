@@ -158,6 +158,142 @@ int main() {
         }
         printf("\n");
     }
+    #include <stdio.h>
+
+int main() {
+
+    // =========================
+    // TABULEIRO 10x10
+    // =========================
+    int tabuleiro[10][10];
+
+    // Inicializa com 0 (água)
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+            tabuleiro[i][j] = 0;
+        }
+    }
+
+    // =========================
+    // NAVIOS (exemplo simples)
+    // =========================
+    for (int i = 0; i < 3; i++) {
+        tabuleiro[2][2 + i] = 3; // horizontal
+        tabuleiro[5 + i][5] = 3; // vertical
+    }
+
+    // =========================
+    // MATRIZES DE HABILIDADE (5x5)
+    // =========================
+    int cone[5][5];
+    int cruz[5][5];
+    int octaedro[5][5];
+
+    // Construção do CONE
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            if (j >= 2 - i && j <= 2 + i)
+                cone[i][j] = 1;
+            else
+                cone[i][j] = 0;
+        }
+    }
+
+    // Construção da CRUZ
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            if (i == 2 || j == 2)
+                cruz[i][j] = 1;
+            else
+                cruz[i][j] = 0;
+        }
+    }
+
+    // Construção do OCTAEDRO (losango)
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            if (abs(i - 2) + abs(j - 2) <= 2)
+                octaedro[i][j] = 1;
+            else
+                octaedro[i][j] = 0;
+        }
+    }
+
+    // =========================
+    // POSIÇÃO DAS HABILIDADES
+    // =========================
+    int origemConeL = 1, origemConeC = 1;
+    int origemCruzL = 5, origemCruzC = 5;
+    int origemOctL = 7, origemOctC = 2;
+
+    // =========================
+    // SOBREPOR HABILIDADES (valor 5)
+    // =========================
+
+    // CONE
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+
+            int linha = origemConeL + i - 2;
+            int coluna = origemConeC + j - 2;
+
+            if (linha >= 0 && linha < 10 && coluna >= 0 && coluna < 10) {
+                if (cone[i][j] == 1 && tabuleiro[linha][coluna] == 0) {
+                    tabuleiro[linha][coluna] = 5;
+                }
+            }
+        }
+    }
+
+    // CRUZ
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+
+            int linha = origemCruzL + i - 2;
+            int coluna = origemCruzC + j - 2;
+
+            if (linha >= 0 && linha < 10 && coluna >= 0 && coluna < 10) {
+                if (cruz[i][j] == 1 && tabuleiro[linha][coluna] == 0) {
+                    tabuleiro[linha][coluna] = 5;
+                }
+            }
+        }
+    }
+
+    // OCTAEDRO
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+
+            int linha = origemOctL + i - 2;
+            int coluna = origemOctC + j - 2;
+
+            if (linha >= 0 && linha < 10 && coluna >= 0 && coluna < 10) {
+                if (octaedro[i][j] == 1 && tabuleiro[linha][coluna] == 0) {
+                    tabuleiro[linha][coluna] = 5;
+                }
+            }
+        }
+    }
+
+    // =========================
+    // EXIBIR TABULEIRO
+    // =========================
+    printf("\nTabuleiro com habilidades:\n\n");
+
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+
+            if (tabuleiro[i][j] == 0)
+                printf("~ "); // água
+            else if (tabuleiro[i][j] == 3)
+                printf("N "); // navio
+            else if (tabuleiro[i][j] == 5)
+                printf("* "); // habilidade
+        }
+        printf("\n");
+    }
 
     return 0;
+}
+
 }
